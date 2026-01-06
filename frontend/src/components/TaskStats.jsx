@@ -7,10 +7,11 @@ export default function TaskStats() {
   const dispatch = useDispatch();
   const stats = useSelector(state => state.tasks.stats);
   const loading = useSelector(state => state.tasks.loading);
+  const tasks = useSelector(state => state.tasks.tasks);
 
   useEffect(() => {
     fetchStats();
-  }, []);
+  }, [tasks]);
 
   const fetchStats = async () => {
     try {
