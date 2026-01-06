@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore, useTaskStore } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
 import { taskAPI, authAPI } from '../services/api';
+import { setTasks, setLoading } from '../store';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
 import TaskStats from '../components/TaskStats';
@@ -9,14 +10,13 @@ import UserProfile from '../components/UserProfile';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const user = useAuthStore(state => state.user);
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.user);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const tasks = useSelector(state => state.tasks.tasks);
+  const loading = useSelector(state => state.tasks.loading);
   const [showForm, setShowForm] = useState(false);
   const [filters, setFilters] = useState({ status: '', priority: '', search: '' });
-  const tasks = useTaskStore(state => state.tasks);
-  const loading = useTaskStore(state => state.loading);
-  const setTasks = useTaskStore(state => state.setTasks);
-  const setLoading = useTaskStore(state => state.setLoading);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -32,17 +32,17 @@ export default function DashboardPage() {
 
   const fetchTasks = async () => {
     try {
-      setLoading(true);
+      dispatch(setLoading(true));
       const response = await taskAPI.getTasks({
         status: filters.status || undefined,
         priority: filters.priority || undefined,
         search: filters.search || undefined
       });
-      setTasks(response.data.tasks);
+      dispatch(setTasks(response.data.tasks));
     } catch (error) {
       console.error('Failed to fetch tasks:', error);
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 

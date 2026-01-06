@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { taskAPI } from '../services/api';
-import { useTaskStore } from '../store';
+import { addTask as addTaskAction, updateTask as updateTaskAction } from '../store';
 
 export default function TaskForm({ taskId, initialData, onClose, onSuccess }) {
   const { register, handleSubmit, formState: { errors } } = useForm({
@@ -16,8 +17,7 @@ export default function TaskForm({ taskId, initialData, onClose, onSuccess }) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState('');
-  const addTask = useTaskStore(state => state.addTask);
-  const updateTask = useTaskStore(state => state.updateTask);
+  const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
     try {
@@ -26,10 +26,10 @@ export default function TaskForm({ taskId, initialData, onClose, onSuccess }) {
 
       if (taskId) {
         await taskAPI.updateTask(taskId, data);
-        updateTask(taskId, data);
+        dispatch(updateTaskAction({ id: taskId, updates: data }));
       } else {
         const response = await taskAPI.createTask(data);
-        addTask(response.data.task);
+        dispatch(addTaskAction(response.data.task));
       }
 
       onSuccess?.();
