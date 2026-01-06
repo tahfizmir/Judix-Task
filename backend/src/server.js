@@ -15,8 +15,8 @@ app.use(helmet());
 
 // CORS middleware
 app.use(cors({
-  origin: config.CORS_ORIGIN,
-  credentials: true
+  origin: '*',
+  credentials: false
 }));
 
 // Body parser middleware
