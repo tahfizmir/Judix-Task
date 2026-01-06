@@ -30,8 +30,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center px-4 py-8">
+      {/* Server Status Banner */}
+      <div className="fixed top-0 left-0 right-0 bg-amber-50 border-b border-amber-200 px-4 py-3 z-50">
+        <div className="max-w-md mx-auto flex items-start gap-3">
+          <div className="text-amber-600 text-xl mt-0.5">⚠️</div>
+          <div className="text-sm">
+            <p className="font-semibold text-amber-900">Free Server Note</p>
+            <p className="text-amber-800 mt-1">This uses a free Render server that goes to sleep after 15 minutes of inactivity. First request may take up to 50 seconds to respond.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div className="w-full max-w-md mt-20">
         <div className="card p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">Judix</h1>
           <p className="text-center text-gray-600 mb-8">Task Management System</p>
